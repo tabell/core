@@ -1,5 +1,11 @@
 `timescale 1ns / 1ps
-
+//////////////////////////////////////////////////////////////////////////////////
+// Module Name:    alu 
+// Project Name:   llama
+// Target Devices: Xilinx Spartan 6 - LX9
+// Tool versions:  Xilinx ISE 14.7 (64 bit) Linux
+// Revision 0.01 - File Created
+//////////////////////////////////////////////////////////////////////////////////
 module alu(
 	input [31:0] operand_a,
 	input [31:0] operand_b,
