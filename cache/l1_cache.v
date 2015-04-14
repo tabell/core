@@ -26,7 +26,7 @@ module l1_cache(
 	integer i; // used as iterator
 
 	initial begin
-		readmemh("code/test1.hex",stored[31:0]);
+		readmemh("code/test1.hex",stored);
 	end
 
 	always @ (posedge clk or posedge rst)
