@@ -128,15 +128,15 @@
          <obj_property name="ObjectShortName">read_addr_b[4:0]</obj_property>
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/core_test_1/uut/regfile_read_data_a" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">regfile_read_data_a[31:0]</obj_property>
-         <obj_property name="ObjectShortName">regfile_read_data_a[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/core_test_1/uut/regfile/read_data_a" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">read_data_a[31:0]</obj_property>
+         <obj_property name="ObjectShortName">read_data_a[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/core_test_1/uut/regfile_read_data_b" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">regfile_read_data_b[31:0]</obj_property>
-         <obj_property name="ObjectShortName">regfile_read_data_b[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/core_test_1/uut/regfile/read_data_b" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">read_data_b[31:0]</obj_property>
+         <obj_property name="ObjectShortName">read_data_b[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/core_test_1/uut/regfile_write_data" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">regfile_write_data[31:0]</obj_property>
@@ -171,7 +171,7 @@
       <wvobject fp_name="/core_test_1/uut/alu_result" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">alu_result[31:0]</obj_property>
          <obj_property name="ObjectShortName">alu_result[31:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/core_test_1/uut/alu1/func" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">func[5:0]</obj_property>
