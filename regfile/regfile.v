@@ -25,7 +25,7 @@ module regfile(
 
 	integer i;
 
-	always @ (posedge clk)
+	always @ (posedge clk or posedge rst)
 	begin 
 		if (rst)
 		begin

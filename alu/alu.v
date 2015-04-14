@@ -10,7 +10,9 @@ module alu(
 	input [31:0] operand_a,
 	input [31:0] operand_b,
 	input [5:0] func,
-	output [31:0] result
+	output [31:0] result,
+	input clk,
+	input clk_en
 	);
 
 	reg [31:0] result;
