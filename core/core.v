@@ -15,6 +15,13 @@ alu alu1(
 	.clk_en(alu_clk_en)
 	);
 
+wire [31:0] regfile_read_data_a;
+wire [31:0] regfile_read_data_b;
+wire [31:0] regfile_write_data;
+wire [4:0] regfile_read_addr_a;
+wire [4:0] regfile_read_addr_b;
+wire [4:0] regfile_write_addr;
+wire regfile_write_enable;
 regfile regfile(
     .read_data_a(regfile_read_data_a),
     .read_data_b(regfile_read_data_b),
@@ -28,7 +35,7 @@ regfile regfile(
     );
 
 	wire clk;
-	reg tmp;
+	reg tmp=0;
 
 	reg [15:0] pc; // program counter
 	reg [15:0] n_pc; // next program counter
@@ -37,9 +44,11 @@ always @(posedge clk) begin
 	if(rst) begin
 		pc <= 10; // start address 10 so maybe interrupts later?
 		n_pc <= 11;
+		tmp <= 0;
 	end else if(clk_en) begin
 		pc <= n_pc;
-		n_pc <= pc + 1;
+		n_pc <= n_pc + 1;
+		tmp <= tmp + 1;
 	end
 end
 
