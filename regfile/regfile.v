@@ -29,8 +29,6 @@ module regfile(
 	begin 
 		if (rst)
 		begin
-			read_data_a <= 0;
-			read_data_b <= 0;
 			for (i = 0; i < 32; i=i+1)
 				stored[i] <= 0;
 		end
@@ -38,8 +36,10 @@ module regfile(
 		begin
 			if (write_enable)
 				stored[write_addr] <= write_data;
-			read_data_a <= stored[read_addr_a];
-			read_data_b <= stored[read_addr_b];
 		end
+	end
+	always @(*) begin
+		read_data_a <= stored[read_addr_a];
+		read_data_b <= stored[read_addr_b];
 	end
 endmodule

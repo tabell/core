@@ -22,7 +22,7 @@ module alu(
 	wire [31:0] operand_b;
 	wire [5:0] func;
 
-	always @(operand_a or operand_b or func) begin
+	always @(posedge clk) begin
 		case (func)
 			32 : result <= operand_a + operand_b; // add
 			36 : result <= operand_a & operand_b; // and
@@ -48,7 +48,7 @@ module alu(
 			// 5'b100011 : result <= operand_a + operand_b; // subu (this is unimplimented)
 			// 5'b100110 : result <= operand_a + operand_b; // xor (this is unimplimented)
 			// 5'b001110 : result <= operand_a + operand_b; // xori (this is unimplimented)
-			default : result <= 32'hDEADBEEF;
+			default : result <= 32'hZ;
 		endcase
 	end
 endmodule
