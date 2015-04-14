@@ -11,6 +11,7 @@ module alu(
 	input [31:0] operand_b,
 	input [5:0] func,
 	output [31:0] result,
+	output [3:0] flags, // neg, zer, ovflw, equal ?
 	input clk,
 	input clk_en
 	);
