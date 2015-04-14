@@ -30,14 +30,16 @@ regfile regfile(
 	wire clk;
 	reg tmp;
 
-	reg [7:0] pc; // program counter
-	reg [7:0] n_pc; // next program counter
+	reg [15:0] pc; // program counter
+	reg [15:0] n_pc; // next program counter
 
 always @(posedge clk) begin
 	if(rst) begin
 		pc <= 10; // start address 10 so maybe interrupts later?
+		n_pc <= 11;
 	end else if(clk_en) begin
-		tmp <= 1;
+		pc <= n_pc;
+		n_pc <= pc + 1;
 	end
 end
 
