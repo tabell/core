@@ -10,7 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="15" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/core_test_1/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -27,10 +27,6 @@
       <obj_property name="ElementShortName">pc[15:0]</obj_property>
       <obj_property name="ObjectShortName">pc[15:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/core_test_1/uut/tmp" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">tmp</obj_property>
-      <obj_property name="ObjectShortName">tmp</obj_property>
    </wvobject>
    <wvobject fp_name="/core_test_1/uut/icache_read_addr" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">icache_read_addr[5:0]</obj_property>
@@ -78,6 +74,31 @@
    <wvobject fp_name="/core_test_1/uut/decode_imm" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">decode_imm[15:0]</obj_property>
       <obj_property name="ObjectShortName">decode_imm[15:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider52" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile_write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">regfile_write_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">regfile_write_data[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile_write_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">regfile_write_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">regfile_write_addr[4:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile_write_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">regfile_write_enable</obj_property>
+      <obj_property name="ObjectShortName">regfile_write_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile/stored" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">stored[0:31,31:0]</obj_property>
+      <obj_property name="ObjectShortName">stored[0:31,31:0]</obj_property>
       <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>

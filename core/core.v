@@ -37,11 +37,11 @@ alu alu1(
 
 wire [31:0] regfile_read_data_a;
 wire [31:0] regfile_read_data_b;
-wire [31:0] regfile_write_data;
+reg [31:0] regfile_write_data;
 wire [4:0] regfile_read_addr_a;
 wire [4:0] regfile_read_addr_b;
-wire [4:0] regfile_write_addr;
-wire regfile_write_enable;
+reg [4:0] regfile_write_addr;
+reg regfile_write_enable;
 
 regfile regfile(
     .read_data_a(regfile_read_data_a),
@@ -79,9 +79,21 @@ always @(posedge clk or negedge rst) begin
 		// clock enables
 		icache_clk_en <= 1;
 		alu_clk_en <= 1;
-
 		// fetch stage
 		icache_read_addr <= pc;
+
+		// execute
+		regfile_write_enable <= 0;
+		regfile_write_addr <= 5'hZ;
+		regfile_write_data <= 5'hZ;
+		if (decode_opcode == 15) begin // load immediate hi
+			regfile_write_addr <= decode_reg_t;
+			regfile_write_data <= decode_imm;
+			regfile_write_enable <= 1;
+		end
+
+
+
 	end
 end
 
@@ -92,12 +104,23 @@ reg [4:0] decode_reg_d;
 reg [10:0] decode_func;
 reg [15:0] decode_imm;
 always @(*) begin : proc_decoder
+	decode_reg_s <= 5'hZ;
 	decode_opcode <= icache_read_data[31:26];
-	decode_reg_s  <= icache_read_data[25:21];
-	decode_reg_t  <= icache_read_data[20:16];
-	decode_reg_d  <= icache_read_data[15:11];
-	decode_func  <= icache_read_data[10:0];
-	decode_imm  <= icache_read_data[15:0];
+	decode_imm <= 16'hZ;
+	decode_reg_s <= 5'hZ;
+	decode_reg_t <= 5'hZ;
+	decode_reg_d <= 5'hZ;
+	decode_func <= 11'hZ;
+
+	if (decode_opcode == 15) begin // load hi immediate
+		decode_imm  <= icache_read_data[15:0];
+		decode_reg_t  <= icache_read_data[20:16]; // source b
+	end else if (decode_opcode == 0) begin // ALU op
+		decode_reg_s  <= icache_read_data[25:21]; // source a
+		decode_reg_t  <= icache_read_data[20:16]; // source b
+		decode_reg_d  <= icache_read_data[15:11]; // destination register
+		decode_func  <= icache_read_data[10:0]; // alu function code
+	end
 end
     
 endmodule
