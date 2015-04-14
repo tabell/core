@@ -24,19 +24,17 @@ module l1_cache(
 	// internal variables
 	reg [31:0] stored[0:63];
 	integer i; // used as iterator
+	integer r;
 
-	initial begin
-		readmemh("code/test1.hex",stored);
-	end
-
-	always @ (posedge clk or posedge rst)
+	always @ (posedge clk or negedge rst)
 	begin 
 		if (rst)
 		begin
 			read_data = 0;
 			for (i = 0; i < 63; i=i+1)
-				stored[i] <= {6'b111111,{26{1'b0}}}; // jump back 5
-				//stored[i] <= 0;
+			 	stored[i] = {6'b111111,26'd0}; // no-op
+			$readmemh("code/test2.hex",stored,10);
+				// stored[i] <= {6'b111111,{26{1'b0}}}; // jump back 5
 			// stored[10] <= {6'b001111,5'b0,5'b0,16'd1987}; // loadimm r0
 			// stored[11] <= {6'b001111,5'b0,5'd1,16'd2015}; // loadimm r1
 			// stored[20] <= {6'b0,5'd1,5'd0,5'd2,5'b0,6'b100010}; // sub

@@ -1,0 +1,8 @@
+#add $2, $0, 7
+lui $2, 7
+nop
+nop
+add $5, $2, $5
+nop
+nop
+j -16
