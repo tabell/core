@@ -35,7 +35,8 @@ module regfile(
 		else
 		begin
 			if (write_enable)
-				stored[write_addr] <= write_data;
+				if (write_addr !== 0) // reg0 reserved
+					stored[write_addr] <= write_data;
 		end
 	end
 	always @(*) begin
