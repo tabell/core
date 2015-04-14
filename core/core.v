@@ -60,18 +60,11 @@ regfile regfile(
 	reg [15:0] pc; // program counter
 	reg [15:0] n_pc; // next program counter
 
-	reg [5:0] decode_opcode;
-	reg [4:0] decode_reg_s;
-	reg [4:0] decode_reg_t;
-	reg [4:0] decode_reg_d;
-	reg [4:0] decode_shamt;
-	reg [5:0] decode_func;
-	reg [15:0] decode_imm;
 
 	reg [5:0]  exec_opcode;
 	reg [15:0] exec_imm;
 	reg [4:0]  exec_reg_t;
-	reg [5:0]  exec_func;
+	reg [4:0]  exec_reg_d;
 
 	reg [5:0]  wb_opcode;
 	reg [15:0] wb_imm;
@@ -90,8 +83,11 @@ always @(posedge clk or negedge rst) begin
 	end else if(clk_en) begin
 		// on every cycle
 		// set new PC
-		pc <= n_pc;
-		n_pc <= n_pc + 1;
+		if (decode_opcode == 2)
+			n_pc <= n_pc + decode_sign_imm[15:0];
+		else
+			n_pc <= n_pc + 1;
+			pc <= n_pc;
 		// clock enables
 		icache_clk_en <= 1;
 		alu_clk_en <= 1;
@@ -99,29 +95,35 @@ always @(posedge clk or negedge rst) begin
 		// fetch stage
 		icache_read_addr <= n_pc;
 
+		// decode
+
 		// execute
 		regfile_write_enable <= 0;
 		regfile_write_addr <= 5'hZ;
 
 		exec_opcode <= decode_opcode;
-		if (decode_opcode == 15) begin // load immediate hi
-			exec_reg_t <= decode_reg_t;
-			exec_imm <= decode_imm; // TODO: this is actually supposed to be shifted left 16 bits
-		end
+		exec_reg_t <= decode_reg_t;
+		exec_reg_d <= decode_reg_d;
+		exec_imm <= decode_imm;
 
 		if (exec_opcode == 15) begin // load immediate hi
 			regfile_write_addr <= exec_reg_t;
-			// regfile_write_data <= exec_imm; // TODO: this is actually supposed to be shifted left 16 bits
 			regfile_write_enable <= 1;
 		end else if (exec_opcode == 0) begin
-			if (decode_reg_d == 0)
+			if (exec_reg_d == 0)
 				regfile_write_enable <= 0;
 			else begin
-				// regfile_write_data <= alu_result;
 				regfile_write_enable <= 1;
-				regfile_write_addr <= decode_reg_d;
+				regfile_write_addr <= exec_reg_d;
 			end
 		end
+		if (exec_opcode == 0)
+			regfile_write_data <= alu_result;
+		else if (exec_opcode == 15)
+			regfile_write_data <= exec_imm;
+			// assign regfile_write_data = {wb_imm,{16{1'b0}}};
+		else
+			regfile_write_data <= 0'h777; // this number has no meaning
 
 		wb_imm <= exec_imm;
 		wb_opcode <= exec_opcode;
@@ -129,23 +131,17 @@ always @(posedge clk or negedge rst) begin
 	end
 end
 
+wire [25:0] decode_full_imm = icache_read_data[25:0];
+wire [5:0] decode_opcode = icache_read_data[31:26];
+wire [4:0] decode_reg_s = icache_read_data[25:21]; // source a
+wire [4:0] decode_reg_t = icache_read_data[20:16]; // source b
+wire [4:0] decode_reg_d = icache_read_data[15:11]; // dest
+wire [4:0] decode_shamt = icache_read_data[10:6]; // shift amount
+wire [5:0] decode_func = icache_read_data[5:0]; // alu function
+wire [15:0] decode_imm = icache_read_data[15:0];
+wire [31:0] decode_sign_imm = {{6{icache_read_data[25]}},icache_read_data[25:0]};
 
 always @(*) begin : proc_decoder
-	assign decode_opcode = icache_read_data[31:26];
-	assign decode_imm = icache_read_data[15:0];
-	assign decode_reg_s = icache_read_data[25:21]; // source a
-	assign decode_reg_t = icache_read_data[20:16]; // source b
-	assign decode_reg_d = icache_read_data[15:11]; // dest
-	assign decode_shamt = icache_read_data[10:6]; // shift amount
-	assign decode_func = icache_read_data[5:0]; // shift amount
-	// if (exec_opcode == 0)
-	// 	assign regfile_write_data = alu_result;
-	if (wb_opcode == 0)
-		assign regfile_write_data = alu_result;
-	else if (wb_opcode == 15)
-		assign regfile_write_data = wb_imm;
-	else
-		assign regfile_write_data = 0'h777;
 end
     
 endmodule
