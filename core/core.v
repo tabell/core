@@ -121,8 +121,7 @@ always @(posedge clk or posedge rst) begin
 		if (exec_opcode == 15) begin // load immediate hi
 			regfile_write_addr <= exec_reg_t;
 			regfile_write_enable <= 1;
-			regfile_write_data <= exec_imm;
-			// assign regfile_write_data = {wb_imm,{16{1'b0}}};
+			regfile_write_data <= {exec_imm,{16{1'b0}}};
 		end else if (exec_opcode == 0) begin
 			if (exec_reg_d == 0)
 				regfile_write_enable <= 0;
