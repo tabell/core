@@ -129,10 +129,6 @@
          <obj_property name="ObjectShortName">operand_b[31:0]</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
-      <wvobject fp_name="/core_test_1/uut/alu_operand_b_mux_sel" type="logic" db_ref_id="1">
-         <obj_property name="ElementShortName">alu_operand_b_mux_sel</obj_property>
-         <obj_property name="ObjectShortName">alu_operand_b_mux_sel</obj_property>
-      </wvobject>
       <wvobject fp_name="/core_test_1/uut/alu1/func" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">func[5:0]</obj_property>
          <obj_property name="ObjectShortName">func[5:0]</obj_property>

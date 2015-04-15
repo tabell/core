@@ -43,7 +43,7 @@ reg [4:0] regfile_write_addr;
 reg regfile_write_enable;
 
 regfile regfile(
-    .read_data_a(alu_operand_a),
+    .read_data_a(regfile_read_data_a),
     .read_data_b(regfile_read_data_b),
     .write_data(regfile_write_data),
     .read_addr_a(decode_reg_s),
@@ -152,12 +152,14 @@ always @(*) begin
 		// decoded immediate value
 	case (decode_opcode)
 		8 : alu_operand_b_mux <= decode_imm; // add immediate
-		0 : alu_operand_b_mux <= regfile_read_data_b;
-			if (decode_func == 0)
-				alu_operand_a_mux <= decode_shamt;
-			else
-				alu_operand_a_mux <= regfile_read_data_a;
-		default : alu_operand_b_mux <= regfile_read_data_b;
+		0 : begin
+				alu_operand_b_mux <= regfile_read_data_b;
+				if (decode_func == 0)
+					alu_operand_a_mux <= decode_shamt;
+				else
+					alu_operand_a_mux <= regfile_read_data_a;
+			end
+		// default : alu_operand_b_mux <= regfile_read_data_b;
 	endcase
 
 
