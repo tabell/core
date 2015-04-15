@@ -109,21 +109,18 @@ always @(posedge clk or negedge rst) begin
 		if (exec_opcode == 15) begin // load immediate hi
 			regfile_write_addr <= exec_reg_t;
 			regfile_write_enable <= 1;
+			regfile_write_data <= exec_imm;
+			// assign regfile_write_data = {wb_imm,{16{1'b0}}};
 		end else if (exec_opcode == 0) begin
 			if (exec_reg_d == 0)
 				regfile_write_enable <= 0;
 			else begin
 				regfile_write_enable <= 1;
 				regfile_write_addr <= exec_reg_d;
+				regfile_write_data <= alu_result;
 			end
 		end
-		if (exec_opcode == 0)
-			regfile_write_data <= alu_result;
-		else if (exec_opcode == 15)
-			regfile_write_data <= exec_imm;
-			// assign regfile_write_data = {wb_imm,{16{1'b0}}};
-		else
-			regfile_write_data <= 0'h777; // this number has no meaning
+		// regfile_write_data <= 0'h777; // this number has no meaning
 
 		wb_imm <= exec_imm;
 		wb_opcode <= exec_opcode;
