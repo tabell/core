@@ -33,21 +33,7 @@ module l1_cache(
 			read_data = 0;
 			for (i = 0; i < 63; i=i+1)
 			 	stored[i] = {6'b111111,26'd0}; // no-op
-			$readmemh("code/test2.hex",stored,10);
-				// stored[i] <= {6'b111111,{26{1'b0}}}; // jump back 5
-			// stored[10] <= {6'b001111,5'b0,5'b0,16'd1987}; // loadimm r0
-			// stored[11] <= {6'b001111,5'b0,5'd1,16'd2015}; // loadimm r1
-			// stored[20] <= {6'b0,5'd1,5'd0,5'd2,5'b0,6'b100010}; // sub
-			
-
-			// stored[10] <= {6'b001111,5'b0,5'd2,16'd1}; // loadimm r4
-			// stored[12] <= {6'b0,5'd2,5'd5,5'd5,5'b0,6'b100000}; // add
-			// stored[15] <= {6'b000010,{23{1'b1}},3'b011}; // jump back 5
-
-
-			// stored[10] <= 32'h3c0207c3; 
-			// stored[12] <= 32'h3c0307df; 
-			// stored[15] <= 32'h00622022;
+			$readmemh("code/alutest.hex",stored,10);
 		end
 		else if (clk_en)
 		begin
