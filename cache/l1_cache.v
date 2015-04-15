@@ -33,7 +33,7 @@ module l1_cache(
 			read_data = 0;
 			for (i = 0; i < 63; i=i+1)
 			 	stored[i] = {6'b111111,26'd0}; // no-op
-			$readmemh("code/alutest.hex",stored,10);
+			$readmemh("code/test1.hex",stored,10);
 		end
 		else if (clk_en)
 		begin
