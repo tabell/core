@@ -1,10 +1,14 @@
 `timescale 1ns / 1ps
+`default_nettype none
 
 module core(
 	input clk,
 	input rst,
 	input clk_en
 );
+
+wire rst;
+wire clk_en;
 
 wire [31:0] icache_read_data;
 reg [5:0] icache_read_addr;
