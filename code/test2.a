@@ -1,8 +1,13 @@
-lui $0, 2345
-lui $2, 7
+add $2, 3
 nop
 nop
-add $5, $2, $5
+nop
+add $3, 4
 nop
 nop
-#j -16
+nop
+sll $4, $2, $3 # R4 <= 3 << 4 = 48
+nop
+nop
+nop
+sll $5, $2, 4 # R5 <= R2 << 4

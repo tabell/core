@@ -10,10 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="14" />
-   <wave_markers>
-      <marker time="330917000" label="" />
-   </wave_markers>
+   <WVObjectSize size="17" />
    <wvobject fp_name="/core_test_1/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -119,6 +116,34 @@
          <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
    </wvobject>
+   <wvobject fp_name="group93" type="group">
+      <obj_property name="label">ALU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/core_test_1/uut/alu1/operand_a" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">operand_a[31:0]</obj_property>
+         <obj_property name="ObjectShortName">operand_a[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/core_test_1/uut/alu1/operand_b" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">operand_b[31:0]</obj_property>
+         <obj_property name="ObjectShortName">operand_b[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/core_test_1/uut/alu_operand_b_mux_sel" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">alu_operand_b_mux_sel</obj_property>
+         <obj_property name="ObjectShortName">alu_operand_b_mux_sel</obj_property>
+      </wvobject>
+      <wvobject fp_name="/core_test_1/uut/alu1/func" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">func[5:0]</obj_property>
+         <obj_property name="ObjectShortName">func[5:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/core_test_1/uut/alu1/result" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">result[31:0]</obj_property>
+         <obj_property name="ObjectShortName">result[31:0]</obj_property>
+         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
    <wvobject fp_name="group92" type="group">
       <obj_property name="label">Regfile</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -162,33 +187,26 @@
          <obj_property name="ObjectShortName">regfile_write_enable</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group93" type="group">
-      <obj_property name="label">ALU</obj_property>
+   <wvobject fp_name="/core_test_1/uut/regfile/stored[2]" type="array" db_ref_id="1">
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/core_test_1/uut/alu1/operand_a" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">operand_a[31:0]</obj_property>
-         <obj_property name="ObjectShortName">operand_a[31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/core_test_1/uut/alu_operand_b_mux_sel" type="logic" db_ref_id="1">
-         <obj_property name="ElementShortName">alu_operand_b_mux_sel</obj_property>
-         <obj_property name="ObjectShortName">alu_operand_b_mux_sel</obj_property>
-      </wvobject>
-      <wvobject fp_name="/core_test_1/uut/alu1/operand_b" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">operand_b[31:0]</obj_property>
-         <obj_property name="ObjectShortName">operand_b[31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/core_test_1/uut/alu1/func" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">func[5:0]</obj_property>
-         <obj_property name="ObjectShortName">func[5:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/core_test_1/uut/alu1/result" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">result[31:0]</obj_property>
-         <obj_property name="ObjectShortName">result[31:0]</obj_property>
-         <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
-      </wvobject>
+      <obj_property name="ElementShortName">[2,31:0]</obj_property>
+      <obj_property name="ObjectShortName">stored[2,31:0]</obj_property>
+      <obj_property name="label">R2</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile/stored[3]" type="array" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[3,31:0]</obj_property>
+      <obj_property name="ObjectShortName">stored[3,31:0]</obj_property>
+      <obj_property name="label">R3</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_test_1/uut/regfile/stored[4]" type="array" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[4,31:0]</obj_property>
+      <obj_property name="ObjectShortName">stored[4,31:0]</obj_property>
+      <obj_property name="label">R4</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/core_test_1/uut/regfile/stored[5]" type="array" db_ref_id="1">
       <obj_property name="DisplayName">label</obj_property>

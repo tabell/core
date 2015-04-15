@@ -22,12 +22,13 @@ l1_cache icache(
 
 wire [31:0] alu_operand_a;
 reg [31:0] alu_operand_b_mux;
+reg [31:0] alu_operand_a_mux;
 reg [5:0] alu_func_mux;
 wire [31:0] alu_result;
 reg alu_clk_en;
 
 alu alu1(
-	.operand_a(alu_operand_a),
+	.operand_a(alu_operand_a_mux),
 	.operand_b(alu_operand_b_mux),
 	.result(alu_result),
 	.func(alu_func_mux),
@@ -45,8 +46,8 @@ regfile regfile(
     .read_data_a(alu_operand_a),
     .read_data_b(regfile_read_data_b),
     .write_data(regfile_write_data),
-    .read_addr_a(icache_read_data[25:21]),
-    .read_addr_b(icache_read_data[20:16]),
+    .read_addr_a(decode_reg_s),
+    .read_addr_b(decode_reg_t),
     .write_addr(regfile_write_addr),
     .write_enable(regfile_write_enable),
     .clk(clk),
@@ -69,10 +70,6 @@ regfile regfile(
 	reg [5:0]  wb_opcode;
 	reg [15:0] wb_imm;
 	reg [4:0]  wb_reg_t;
-
-
-	reg alu_operand_b_mux_sel;
-	reg alu_func_mux_sel;
 
 
 always @(posedge clk or posedge rst) begin
@@ -136,14 +133,6 @@ always @(posedge clk or posedge rst) begin
 			regfile_write_data <= alu_result;
 		end
 
-		// switches ALU input b betwen regfile output and
-		// decoded immediate value
-		if (decode_opcode == 8)
-			alu_operand_b_mux_sel <= 0;
-		else
-			alu_operand_b_mux_sel <= 1;
-		// switches alu func input between decoded
-		// func and decoded opcode
 
 	end
 end
@@ -158,16 +147,24 @@ wire [5:0] decode_func = icache_read_data[5:0]; // alu function
 wire [15:0] decode_imm = icache_read_data[15:0];
 wire [31:0] decode_sign_imm = {{6{icache_read_data[25]}},icache_read_data[25:0]};
 
-// alu_operand_b = alu_operand_b_mux_sel ? read_data_b : decode_imm;
 always @(*) begin
+		// switches ALU input b betwen regfile output and
+		// decoded immediate value
 	case (decode_opcode)
-		8 : alu_operand_b_mux <= decode_imm;
+		8 : alu_operand_b_mux <= decode_imm; // add immediate
+		0 : alu_operand_b_mux <= regfile_read_data_b;
+			if (decode_func == 0)
+				alu_operand_a_mux <= decode_shamt;
+			else
+				alu_operand_a_mux <= regfile_read_data_a;
 		default : alu_operand_b_mux <= regfile_read_data_b;
 	endcase
 
 
 
 
+		// switches alu func input between decoded
+		// func and decoded opcode
 	case (decode_opcode)
 		0 :	alu_func_mux <= decode_func;
 		default : alu_func_mux <= decode_opcode;
