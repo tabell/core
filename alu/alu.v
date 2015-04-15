@@ -31,7 +31,7 @@ module alu(
 			34 : result <= operand_a - operand_b; // sub
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 			// 5'b100001 : result <= operand_a + operand_b; // addu (this is unimplimented)
-			// 5'b001000 : result <= operand_a + operand_b; // addi (this is unimplimented)
+			8 : result <= operand_a + operand_b; // addi (this is unimplimented)
 			// 5'b001001 : result <= operand_a + operand_b; // addiu (this is unimplimented)
 			// 5'b001100 : result <= operand_a + operand_b; // andi (this is unimplimented)
 			// 5'b011010 : result <= operand_a + operand_b; // div (this is unimplimented)

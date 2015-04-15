@@ -13,7 +13,7 @@ reg icache_clk_en;
 
 l1_cache icache(
 	.read_data(icache_read_data),
-	.read_addr(icache_read_addr),
+	.read_addr(pc[5:0]),
 	.data_ready(icache_data_ready),
 	.clk(clk),
 	.clk_en(icache_clk_en),
@@ -21,15 +21,16 @@ l1_cache icache(
 	);
 
 wire [31:0] alu_operand_a;
-wire [31:0] alu_operand_b;
+reg [31:0] alu_operand_b_mux;
+reg [5:0] alu_func_mux;
 wire [31:0] alu_result;
 reg alu_clk_en;
 
 alu alu1(
 	.operand_a(alu_operand_a),
-	.operand_b(alu_operand_b),
+	.operand_b(alu_operand_b_mux),
 	.result(alu_result),
-	.func(decode_func),
+	.func(alu_func_mux),
 	.clk(clk),
 	.clk_en(alu_clk_en)
 	);
@@ -40,11 +41,9 @@ reg [31:0] regfile_write_data;
 reg [4:0] regfile_write_addr;
 reg regfile_write_enable;
 
-reg regfile_write_data_mux;
-
 regfile regfile(
     .read_data_a(alu_operand_a),
-    .read_data_b(alu_operand_b),
+    .read_data_b(regfile_read_data_b),
     .write_data(regfile_write_data),
     .read_addr_a(icache_read_data[25:21]),
     .read_addr_b(icache_read_data[20:16]),
@@ -65,12 +64,18 @@ regfile regfile(
 	reg [15:0] exec_imm;
 	reg [4:0]  exec_reg_t;
 	reg [4:0]  exec_reg_d;
+	reg [5:0]  exec_func;
 
 	reg [5:0]  wb_opcode;
 	reg [15:0] wb_imm;
+	reg [4:0]  wb_reg_t;
 
 
-always @(posedge clk or negedge rst) begin
+	reg alu_operand_b_mux_sel;
+	reg alu_func_mux_sel;
+
+
+always @(posedge clk or posedge rst) begin
 	if(rst) begin
 		// reset PC
 		pc <= 0; // start address 10 so maybe interrupts later?
@@ -87,13 +92,14 @@ always @(posedge clk or negedge rst) begin
 			n_pc <= n_pc + decode_sign_imm[15:0];
 		else
 			n_pc <= n_pc + 1;
-			pc <= n_pc;
+		pc <= n_pc;
+
 		// clock enables
 		icache_clk_en <= 1;
 		alu_clk_en <= 1;
 
 		// fetch stage
-		icache_read_addr <= n_pc;
+		// icache_read_addr <= n_pc[5:0];
 
 		// decode
 
@@ -105,7 +111,13 @@ always @(posedge clk or negedge rst) begin
 		exec_reg_t <= decode_reg_t;
 		exec_reg_d <= decode_reg_d;
 		exec_imm <= decode_imm;
+		exec_func <= decode_func;
 
+		// writeback
+		wb_imm <= exec_imm;
+		wb_opcode <= exec_opcode;
+		wb_reg_t <= exec_reg_t;
+		
 		if (exec_opcode == 15) begin // load immediate hi
 			regfile_write_addr <= exec_reg_t;
 			regfile_write_enable <= 1;
@@ -119,11 +131,20 @@ always @(posedge clk or negedge rst) begin
 				regfile_write_addr <= exec_reg_d;
 				regfile_write_data <= alu_result;
 			end
+		end else if (exec_opcode == 8) begin // add immediate
+			regfile_write_enable <= 1;
+			regfile_write_addr <= exec_reg_t;
+			regfile_write_data <= alu_result;
 		end
-		// regfile_write_data <= 0'h777; // this number has no meaning
 
-		wb_imm <= exec_imm;
-		wb_opcode <= exec_opcode;
+		// switches ALU input b betwen regfile output and
+		// decoded immediate value
+		if (decode_opcode == 8)
+			alu_operand_b_mux_sel <= 0;
+		else
+			alu_operand_b_mux_sel <= 1;
+		// switches alu func input between decoded
+		// func and decoded opcode
 
 	end
 end
@@ -138,7 +159,24 @@ wire [5:0] decode_func = icache_read_data[5:0]; // alu function
 wire [15:0] decode_imm = icache_read_data[15:0];
 wire [31:0] decode_sign_imm = {{6{icache_read_data[25]}},icache_read_data[25:0]};
 
-always @(*) begin : proc_decoder
+// alu_operand_b = alu_operand_b_mux_sel ? read_data_b : decode_imm;
+always @(*) begin
+	case (decode_opcode)
+		8 : alu_operand_b_mux <= decode_imm;
+		default : alu_operand_b_mux <= regfile_read_data_b;
+	endcase
+
+
+
+
+	case (decode_opcode)
+		0 :	alu_func_mux <= decode_func;
+		default : alu_func_mux <= decode_opcode;
+	endcase
+
+
+
+
 end
     
 endmodule
