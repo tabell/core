@@ -31,9 +31,9 @@ module l1_cache(
 		if (rst)
 		begin
 			read_data <= 0;
-			for (i = 0; i < 63; i=i+1)
+			for (i = 0; i < 64; i=i+1)
 			 	stored[i] = {6'b111111,26'd0}; // no-op
-			$readmemh("code/test2.hex",stored,10);
+			$readmemh("code/shifting.hex",stored,10);
 		end
 		else if (clk_en)
 		begin

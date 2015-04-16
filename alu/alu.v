@@ -24,19 +24,20 @@ module alu(
 
 	always @(posedge clk) begin
 		case (func)
-			32 : result <= operand_a + operand_b; // add
+			0 : result <= operand_b << operand_a; // sll 000000
+			2 : result <= operand_b >> operand_a; // srl 000010
+			3 : result <= $signed(operand_b) >>> $signed(operand_a); // sra 000011
+			4 : result <= operand_b << operand_a; // sllv 000100
+			6 : result <= operand_b >> operand_a; // srlv 000110
+			7 : result <= $signed(operand_b) >>> $signed(operand_a); // srav 000111
 			8 : result <= operand_a + operand_b; // addi
+			32 : result <= operand_a + operand_b; // add
+			34 : result <= operand_a - operand_b; // sub
 			36 : result <= operand_a & operand_b; // and
 			37 : result <= operand_a | operand_b; // or
+			38 : result <= operand_a ^ operand_b; // xor
 			43 : result <= operand_a | ~operand_b; // nor
-			34 : result <= operand_a - operand_b; // sub
 			// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-			0 : result <= operand_b << operand_a; // sll 000000
-			4 : result <= operand_b << operand_a; // sllv 000100
-			// 2 : result <= operand_a + operand_b; // srl 000010
-			// 3 : result <= operand_a + operand_b; // sra 000011
-			// 6 : result <= operand_a + operand_b; // srlv 000110
-			// 7 : result <= operand_a + operand_b; // srav 000111
 			// 9 : result <= operand_a + operand_b; // addiu 001001
 			// 12 : result <= operand_a + operand_b; // andi 001100
 			// 13 : result <= operand_a + operand_b; // ori 001101
@@ -47,7 +48,6 @@ module alu(
 			// 27 : result <= operand_a + operand_b; // divu 011011
 			// 33 : result <= operand_a + operand_b; // addu 100001
 			// 35 : result <= operand_a + operand_b; // subu 100011
-			// 38 : result <= operand_a + operand_b; // xor 100110
 			default : result <= 32'hZ;
 		endcase
 	end

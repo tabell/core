@@ -87,6 +87,12 @@ always @(posedge clk or posedge rst) begin
 		alu_clk_en <= 0;
 
 	end else if(clk_en) begin
+		// clock enables
+		icache_clk_en <= 1;
+		alu_clk_en <= 1;
+
+		// fetch stage
+		
 		// on every cycle
 		// set new PC
 		if (decode_opcode == 2)
@@ -94,15 +100,6 @@ always @(posedge clk or posedge rst) begin
 		else
 			n_pc <= n_pc + 1;
 		pc <= n_pc;
-
-		// clock enables
-		icache_clk_en <= 1;
-		alu_clk_en <= 1;
-
-		// fetch stage
-		// icache_read_addr <= n_pc[5:0];
-
-		// decode
 
 		// execute
 		regfile_write_enable <= 0;
@@ -124,7 +121,7 @@ always @(posedge clk or posedge rst) begin
 			regfile_write_enable <= 1;
 			regfile_write_data <= {exec_imm,{16{1'b0}}};
 		end else if (exec_opcode == 0) begin
-			if (exec_reg_d == 0)
+			if (exec_reg_d == 0) // dest reg 0 = no-op
 				regfile_write_enable <= 0;
 			else begin
 				regfile_write_enable <= 1;
@@ -136,12 +133,9 @@ always @(posedge clk or posedge rst) begin
 			regfile_write_addr <= exec_reg_t;
 			regfile_write_data <= alu_result;
 		end
-
-
 	end
 end
 
-wire [25:0] decode_full_imm = icache_read_data[25:0];
 wire [5:0] decode_opcode = icache_read_data[31:26];
 wire [4:0] decode_reg_s = icache_read_data[25:21]; // source a
 wire [4:0] decode_reg_t = icache_read_data[20:16]; // source b
@@ -149,36 +143,40 @@ wire [4:0] decode_reg_d = icache_read_data[15:11]; // dest
 wire [4:0] decode_shamt = icache_read_data[10:6]; // shift amount
 wire [5:0] decode_func = icache_read_data[5:0]; // alu function
 wire [15:0] decode_imm = icache_read_data[15:0];
-wire [31:0] decode_sign_imm = {{6{icache_read_data[25]}},icache_read_data[25:0]};
+wire [31:0] decode_sign_imm = {{16{icache_read_data[15]}},icache_read_data[15:0]};
+wire [25:0] decode_full_imm = icache_read_data[25:0];
+wire [31:0] decode_sign_full_imm = {{6{icache_read_data[25]}},icache_read_data[25:0]};
 
 always @(*) begin
-		// switches ALU input b betwen regfile output and
-		// decoded immediate value
+	// switches ALU input b betwen regfile output and
+	// decoded immediate value
 	case (decode_opcode)
-		8 : alu_operand_b_mux <= decode_imm; // add immediate
+		8 : begin
+				alu_operand_b_mux <= decode_sign_imm; // add immediate
+				alu_operand_a_mux <= regfile_read_data_a;
+			end
 		0 : begin
 				alu_operand_b_mux <= regfile_read_data_b;
-				if (decode_func == 0)
-					alu_operand_a_mux <= decode_shamt;
-				else
-					alu_operand_a_mux <= regfile_read_data_a;
+				case (decode_func)
+					0 : alu_operand_a_mux <= decode_shamt;
+					2 : alu_operand_a_mux <= decode_shamt;
+					3 : alu_operand_a_mux <= decode_shamt;
+					4 : alu_operand_a_mux <= regfile_read_data_a;
+					6 : alu_operand_a_mux <= regfile_read_data_a;
+					7 : alu_operand_a_mux <= regfile_read_data_a;
+				default : alu_operand_a_mux <= regfile_read_data_a;
+				endcase
 			end
-		// default : alu_operand_b_mux <= regfile_read_data_b;
+		default : alu_operand_b_mux <= regfile_read_data_b;
 	endcase
 
+	// 
 
-
-
-		// switches alu func input between decoded
-		// func and decoded opcode
+	// switches alu func input between decoded
+	// func and decoded opcode
 	case (decode_opcode)
 		0 :	alu_func_mux <= decode_func;
 		default : alu_func_mux <= decode_opcode;
 	endcase
-
-
-
-
 end
-    
 endmodule

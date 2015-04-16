@@ -6,7 +6,21 @@
 
 ## Completed
 Currently a small subset of MIPS instructions are implemented. Load Upper Immediate is implemented (although currently bit-shifting the imm value to the high word is disabled). ALU operations on registers such as ADD and SUB are tested, however they don't work unless you follow them with NO-OPs in the program code. Unconditional jump is implemented although two subsequent instructions will enter the pipeline and currently will be (at least partially) executed.
-
+### implemented instructions
+- add/sub, addimm
+- and/or/nor/xor
+- sll/sllv/srl/sra/srlv/srav
+- loadimm
+- jump
+### not implemented
+- add/sub unsigned
+- andi/ori/xori
+- load/store
+- move
+- setting, comparison
+- branching
+- multiplication
+- division
 ## Goals
 ### Core
 - Implement conditional branching

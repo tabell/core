@@ -2,10 +2,6 @@ add $2, $0, 1987
 nop
 nop
 nop
-lui $5, 1987
-nop
-nop
-nop
 add $3, $0, 2015
 #lui $3,2015
 nop
