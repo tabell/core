@@ -12,7 +12,6 @@ module test_alu;
 	wire [3:0] flags;
 
 	reg clk=0;
-	logic x;
 
 	wire [31:0] result;
 
@@ -30,47 +29,35 @@ module test_alu;
 		#10 clk <= ~clk;
 	end
 
+	always @(posedge clk) begin
+		$display("t=%g a = %d b = %d, func = 0b%b, result=%d",$time,operand_a,operand_b,func,result);
+	end
 
+	task testcase(input int a, b, test_func, out);
+		operand_a <= a;
+		operand_b <= b;
+		func <= test_func;
+		#20;
+		assert (result == out) else $error("Wrong result: expected %d, got %d",out,result);
 
+	endtask : testcase
+
+	int corr;
 	initial begin
-		$display("Starting alu testbench");
-		$monitor("t=%g a = %d b = %d, func = %d, result=%d",$time,operand_a,operand_b,func,result);
 		// Initialize Inputs
 		operand_a = 0;
 		operand_b = 0;
 
-		// Wait 100 ns for global reset to finish
-		#100;
-		operand_a <= 100;
-		operand_b <= 75;
-		func <= `func_add;
-		#20;
-		// x = testcase(100, 75, `func_add, 175);
-		operand_a <= 7;
-		operand_b <= 7;
-		func <= `func_sub;
-		#20;
-		operand_a <= 999;
-		operand_b <= 1;
-		#20;
-		operand_a <= 9999;
-		operand_b <= 9999;
-		#20;
-		operand_a <= 99999;
-		operand_b <= -999;
-		#20;
+		testcase(100, 75, `func_add, 175);
+		testcase(1024, 2048, `func_add, 3072);
+		testcase(7, 7, `func_sub, 0);
+		testcase(99, 1, `func_sub, 98);
+		testcase(9999, 9999, `func_sub, 0);
+		testcase(9999, -999, `func_sub, (9999+999));
         
         $finish;
-		// Add stimulus here
-
 	end
    
-	task testcase(output int pass, input int a, b, test_func, out);
-		operand_a <= a;
-		operand_b <= b;
-		func <= test_func;
-		#20 $display("a = %d b = %d, func = %x, expected %d, got %d",operand_a,operand_b,func,result,out);
-	endtask : testcase
 
 endmodule
 
