@@ -29,17 +29,13 @@ module test_alu;
 		#10 clk <= ~clk;
 	end
 
-	always @(posedge clk) begin
-		$display("t=%g a = %d b = %d, func = 0b%b, result=%d",$time,operand_a,operand_b,func,result);
-	end
-
 	task testcase(input int a, b, test_func, out);
 		operand_a <= a;
 		operand_b <= b;
 		func <= test_func;
 		#20;
+		$display("t=%g a = %d b = %d, func = 0b%b, result=%d",$time,operand_a,operand_b,func,result);
 		assert (result == out) else $error("Wrong result: expected %d, got %d",out,result);
-
 	endtask : testcase
 
 	int corr;
