@@ -21,12 +21,12 @@ module alu(
 
 	always @(posedge clk) begin
 		case (func)
-			0 : result <= operand_b << operand_a; // sll 000000
-			2 : result <= operand_b >> operand_a; // srl 000010
-			3 : result <= $signed(operand_b) >>> $signed(operand_a); // sra 000011
-			4 : result <= operand_b << operand_a; // sllv 000100
-			6 : result <= operand_b >> operand_a; // srlv 000110
-			7 : result <= $signed(operand_b) >>> $signed(operand_a); // srav 000111
+			`func_sll : result <= operand_b << operand_a; // sll 000000
+			`func_srl : result <= operand_b >> operand_a; // srl 000010
+			`func_sra : result <= $signed(operand_b) >>> $signed(operand_a); // sra 000011
+			`func_sllv : result <= operand_b << operand_a; // sllv 000100
+			`func_srlv : result <= operand_b >> operand_a; // srlv 000110
+			`func_srav : result <= $signed(operand_b) >>> $signed(operand_a); // srav 000111
 			`func_addi : result <= operand_a + operand_b; // addi
 			`func_add : result <= operand_a + operand_b; // add
 			`func_sub : result <= operand_a - operand_b; // sub
@@ -47,6 +47,5 @@ module alu(
 			// 35 : result <= operand_a + operand_b; // subu 100011
 			default : result <= 32'hZ;
 		endcase
-		result <= 123;
 	end
 endmodule
