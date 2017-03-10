@@ -8,8 +8,8 @@
 // Revision 0.01 - File Created
 //////////////////////////////////////////////////////////////////////////////////
 module regfile(
-    output [31:0] read_data_a,
-    output [31:0] read_data_b,
+    output reg [31:0] read_data_a,
+    output reg [31:0] read_data_b,
     input [31:0] write_data,
     input [4:0] read_addr_a,
     input [4:0] read_addr_b,
@@ -20,8 +20,6 @@ module regfile(
     );
 
 	reg [31:0] stored[0:31];
-	reg [31:0] read_data_a;
-	reg [31:0] read_data_b;
 
 	integer i;
 
