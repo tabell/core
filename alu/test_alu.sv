@@ -1,26 +1,5 @@
 `timescale 1ns / 1ps
 
-////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer:
-//
-// Create Date:   19:51:45 04/07/2015
-// Design Name:   alu
-// Module Name:   /home/alex/verilog/core1/alu/test_alu.v
-// Project Name:  core1
-// Target Device:  
-// Tool versions:  
-// Description: 
-//
-// Verilog Test Fixture created by ISE for module: alu
-//
-// Dependencies:
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-////////////////////////////////////////////////////////////////////////////////
 `include "alu.svh"
 
 module test_alu;
