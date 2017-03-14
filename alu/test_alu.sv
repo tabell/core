@@ -4,6 +4,13 @@
 
 module test_alu;
 
+	// typedef struct {
+	// 	rand int input_a;
+	// 	rand int input_b;
+	// 		 int func;
+	// 		 int result;
+	// } alu_op;
+
 	// Inputs
 	reg [31:0] operand_a;
 	reg [31:0] operand_b;

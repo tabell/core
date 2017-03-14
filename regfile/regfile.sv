@@ -1,12 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Create Date:    17:49:28 04/07/2015 
-// Module Name:    regfile 
-// Project Name:   llama
-// Target Devices: Xilinx Spartan 6 - LX9
-// Tool versions:  Xilinx ISE 14.7 (64 bit) Linux
-// Revision 0.01 - File Created
-//////////////////////////////////////////////////////////////////////////////////
 module regfile(
     output reg [31:0] read_data_a,
     output reg [31:0] read_data_b,

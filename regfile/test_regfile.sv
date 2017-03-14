@@ -28,9 +28,30 @@ module test_regfile;
 		.rst(rst)
 	);
 
+	task test_write_readback_one_a(input int addr,data);
+		write_addr <= addr;
+		write_data <= data;
+		write_enable <= 1;
+		// $display("addr = %u data = %d, wr = %b",addr,data,write_enable);
+		#20;
+		write_addr <= 0;
+		write_data <= 0;
+		read_addr_a <= addr;
+		write_enable <= 0;
+		#20;
+		assert(read_data_a == data) 
+			else $error("Wrong value read from port a: expected %d got %d",data,read_data_a);
+	endtask : test_write_readback_one_a
+
+
+	// always @(read_data_a) begin
+	// 	$display("a[%u] = %d",read_addr_a,read_data_a);
+	// end
+	// always @(read_data_b) begin
+	// 	$display("b[%u] = %d",read_addr_b,read_data_b);
+	// end
+
 	initial begin
-		$monitor("t=%g a[%d] = %d, b[%d] = %d",
-			$time, read_addr_a, read_data_a, read_addr_b, read_data_b);
 		// Initialize Inputs
 		write_data = 0;
 		read_addr_a = 0;
@@ -39,29 +60,26 @@ module test_regfile;
 		write_enable = 0;
 		clk = 0;
 		rst = 0;
+		#20 rst <= 1;
+		#20 rst <= 0;
+		$display("Reset complete",);
 
-		// Wait 100 ns for global reset to finish
-        rst <= 1;
-		#200;
-        rst <= 0;
-		#20 
-		write_addr <= 7;
-        write_data <= 327;
-        write_enable <= 1;
-        #20; 
-		write_addr <= 3;
-        write_data <= 36827;
-        #20;
-        write_enable <= 0;
-        #20;
-		#20 read_addr_a <= 7;
-		#20 read_addr_b <= 3;
+		// Register 0 is reserved (why?)
+		for (int i=1; i < 32; i++) begin
+			for (int j=1; j < 1024; j++) begin
+				test_write_readback_one_a(i,$urandom());
+			end
+		end
 		// Add stimulus here
 		$finish;
 	end
 	always begin
 		#10	clk <= ~clk;
 	end
+	// always @(posedge clk) begin
+	// 			$display("t = %g, data_w = %d, addr_w = %u, wr_en = %b || addr_a = %u, addr_b = %u, data_a = %d, data_b = %d",
+	// 		$time,write_data,write_addr,write_enable,read_addr_a,read_addr_b,read_data_a,read_data_b);
+	// end
       
 endmodule
 

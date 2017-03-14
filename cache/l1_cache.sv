@@ -1,10 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Module Name:    l1_cache 
-// Target Devices: Xilinx Spartan 6 - LX9
-// Tool versions:  Xilinx ISE 14.7 (64 bit) Linux
-// Revision 0.01 - File Created
-//////////////////////////////////////////////////////////////////////////////////
 module l1_cache(
     output [31:0] read_data,
     input [15:0] read_addr,
